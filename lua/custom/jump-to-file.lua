@@ -6,16 +6,18 @@ local function open_file(filepath)
     vim.cmd('tabedit ' .. fn.fnameescape(filepath))
     return true
   end
-  print('No such file: ' .. filepath)
+  vim.ui.input({ prompt = 'No such file: ' .. filepath .. '\nEnter path: ', default = fn.getcwd() .. '/', completion = 'file' }, function(alt)
+    if alt and alt ~= '' then
+      if fn.filereadable(alt) == 1 then
+        vim.cmd('tabedit ' .. fn.fnameescape(alt))
+      else
+        print('No such file: ' .. alt)
+      end
+    end
+  end)
   return false
 end
 
-local function cfile() return fn.expand('<cfile>') end
-
-local function selection()
-  vim.cmd('normal! "zy')
-  return fn.getreg('z')
-end
 
 local function ask_dir(prompt)
   local dir = fn.input(prompt or 'Enter path: ', fn.getcwd(), 'dir')
