@@ -375,8 +375,9 @@ zR "unfold all"
 ---------------------- MISC -----------------------------
 % "jump to close/open bracket"
 C-v "select vertical from the cursor. Move the cursor down to select text"
-:<start>,<end>normal I<string_to_add> "Add string as the begining of selected multiple line start-end. Can use visual mode to choose the range"
-:<start>,<end>normal A<string_to_add> "Add string as the end of selected multiple line start-end. Can use visual mode to choose the range"
+Note: After select all vertical lines -> Press I (capital i) to enter the Insert mode  -> Type characters want to insert -> ESC to apply all selected vetical lines. 
+:<start>,<end>normal I<string_to_add> "Add string as the begining of selected range."
+:<start>,<end>normal A<string_to_add> "Add string as the end of selected range."
 C-a "increase number by one. For example, the cursor is at 1, C-a will increase one by each C-a"
 C-x "same as C-a but to decrease"
 -------------------- END MISC ---------------------------
