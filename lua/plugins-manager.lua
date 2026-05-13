@@ -27,7 +27,7 @@ plug('morhetz/gruvbox')
 -- UI
 plug('folke/which-key.nvim')
 plug('nvim-lualine/lualine.nvim')
-plug('nvimdev/lspsaga.nvim')
+--plug('nvimdev/lspsaga.nvim')
 plug('mhinz/vim-startify')
 
 -- Editing
@@ -45,7 +45,7 @@ plug('L3MON4D3/LuaSnip')
 
 -- LSP & Treesitter
 plug('mfussenegger/nvim-jdtls')
-plug('nvim-treesitter/nvim-treesitter', { ['do'] = ':TSUpdate' })
+plug('nvim-treesitter/nvim-treesitter', { ['branch'] = 'master', ['do'] = ':TSUpdate' })
 
 -- Markdown
 plug('ellisonleao/glow.nvim')
