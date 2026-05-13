@@ -1,5 +1,13 @@
 local map = vim.keymap.set
 
+-- Search in current file
+map('n', 's', function()
+  local pattern = vim.fn.input('Search: ')
+  if pattern ~= '' then
+    vim.cmd('vimgrep /' .. pattern .. '/ % | copen')
+  end
+end, { desc = 'search-in-file' })
+
 -- Exit terminal mode
 map('t', '<Esc>', '<C-\\><C-n>', { desc = 'exit-terminal-mode' })
 
