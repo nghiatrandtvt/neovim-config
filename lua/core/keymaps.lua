@@ -3,8 +3,10 @@ local map = vim.keymap.set
 -- Search in current file or directory: pattern then optional path with tab completion
 map('n', 's', function()
   local pattern = vim.fn.input('Search: ')
-  if pattern == '' then return end
-  local dir = vim.fn.input('Directory (empty = current file): ', '', 'dir')
+  if pattern == '' then
+    pattern = vim.fn.expand('<cword>')
+  end
+  local dir = vim.fn.input('(Searching "' .. pattern .. '") Enter file or directory (empty = current file): ', '', 'file')
   if dir == '' then
     vim.cmd('vimgrep /' .. pattern .. '/ % | copen')
   else
@@ -16,13 +18,16 @@ end, { desc = 'search-file-or-dir' })
 -- Search in all open buffers
 map('n', 'S', function()
   local pattern = vim.fn.input('Search: ')
-  if pattern == '' then return end
+  if pattern == '' then
+    pattern = vim.fn.expand('<cword>')
+  end
   local files = table.concat(vim.tbl_map(function(buf)
     return vim.api.nvim_buf_get_name(buf)
   end, vim.tbl_filter(function(buf)
     return vim.api.nvim_buf_is_loaded(buf) and vim.api.nvim_buf_get_name(buf) ~= ''
   end, vim.api.nvim_list_bufs())), ' ')
   vim.cmd('vimgrep /' .. pattern .. '/ ' .. files .. ' | copen')
+  vim.cmd('echo \'Searched "' .. pattern .. '" in all open buffers\'')
 end, { desc = 'search-open-buffers' })
 
 -- Exit terminal mode
