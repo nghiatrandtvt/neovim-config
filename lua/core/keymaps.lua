@@ -1,34 +1,65 @@
 local map = vim.keymap.set
 
+local function get_visual_selection()
+  local _, ls, cs = unpack(vim.fn.getpos('v'))
+  local _, le, ce = unpack(vim.fn.getpos('.'))
+  return table.concat(vim.api.nvim_buf_get_text(0, ls-1, cs-1, le-1, ce, {}), '\n')
+end
+
 -- Search in current file or directory: pattern then optional path with tab completion
 map('n', 's', function()
-  local pattern = vim.fn.input('Search: ')
-  if pattern == '' then
-    pattern = vim.fn.expand('<cword>')
-  end
+  local pattern = vim.fn.input('Search: ', vim.fn.expand('<cword>'))
+  if pattern == '' then return end
   local dir = vim.fn.input('(Searching "' .. pattern .. '") Enter file or directory (empty = current file): ', '', 'file')
+  vim.fn.setqflist({})
   if dir == '' then
     vim.cmd('vimgrep /' .. pattern .. '/ % | copen')
   else
-    vim.cmd('grep! -r ' .. pattern .. ' ' .. dir)
+    vim.cmd('grep! -rE ' .. vim.fn.shellescape(pattern) .. ' ' .. dir)
     vim.cmd('copen')
   end
 end, { desc = 'search-file-or-dir' })
 
 -- Search in all open buffers
 map('n', 'S', function()
-  local pattern = vim.fn.input('Search: ')
-  if pattern == '' then
-    pattern = vim.fn.expand('<cword>')
-  end
+  local pattern = vim.fn.input('Search: ', vim.fn.expand('<cword>'))
+  if pattern == '' then return end
   local files = table.concat(vim.tbl_map(function(buf)
     return vim.api.nvim_buf_get_name(buf)
   end, vim.tbl_filter(function(buf)
     return vim.api.nvim_buf_is_loaded(buf) and vim.api.nvim_buf_get_name(buf) ~= ''
   end, vim.api.nvim_list_bufs())), ' ')
+  vim.fn.setqflist({})
   vim.cmd('vimgrep /' .. pattern .. '/ ' .. files .. ' | copen')
   vim.cmd('echo \'Searched "' .. pattern .. '" in all open buffers\'')
 end, { desc = 'search-open-buffers' })
+
+-- Visual mode: search selected text
+map('v', 's', function()
+  local pattern = vim.fn.input('Search: ', get_visual_selection())
+  if pattern == '' then return end
+  local dir = vim.fn.input('(Searching "' .. pattern .. '") Enter file or directory (empty = current file): ', '', 'file')
+  vim.fn.setqflist({})
+  if dir == '' then
+    vim.cmd('vimgrep /' .. pattern .. '/ % | copen')
+  else
+    vim.cmd('grep! -rE ' .. vim.fn.shellescape(pattern) .. ' ' .. dir)
+    vim.cmd('copen')
+  end
+end, { desc = 'search-selection-file-or-dir' })
+
+map('v', 'S', function()
+  local pattern = vim.fn.input('Search: ', get_visual_selection())
+  if pattern == '' then return end
+  local files = table.concat(vim.tbl_map(function(buf)
+    return vim.api.nvim_buf_get_name(buf)
+  end, vim.tbl_filter(function(buf)
+    return vim.api.nvim_buf_is_loaded(buf) and vim.api.nvim_buf_get_name(buf) ~= ''
+  end, vim.api.nvim_list_bufs())), ' ')
+  vim.fn.setqflist({})
+  vim.cmd('vimgrep /' .. pattern .. '/ ' .. files .. ' | copen')
+  vim.cmd('echo \'Searched "' .. pattern .. '" in all open buffers\'')
+end, { desc = 'search-selection-open-buffers' })
 
 -- Exit terminal mode
 map('t', '<Esc>', '<C-\\><C-n>', { desc = 'exit-terminal-mode' })
@@ -86,5 +117,5 @@ vim.api.nvim_create_user_command('CopyToClipboard', function(opts)
 end, { nargs = 1 })
 
 vim.api.nvim_create_user_command('Repo', function(opts)
-  vim.cmd('tcd <path>' .. opts.args)
+  vim.cmd('tcd /repo/xnghtra/' .. opts.args)
 end, { nargs = 1, complete = 'dir' })
