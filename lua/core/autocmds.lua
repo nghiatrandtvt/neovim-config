@@ -6,8 +6,16 @@ vim.api.nvim_create_autocmd('FileType', {
     local opts = { buffer = true, noremap = true }
     map('n', '<CR>',  '<CR>',              opts)  -- default: open in current window
     map('n', 't',     '<C-W><CR><C-W>T',   opts)  -- open in new tab
-    map('n', 'x',     '<C-W><CR><C-W>K',   opts)  -- open in horizontal split
-    map('n', 'v',     '<C-W><CR><C-W>H',   opts)  -- open in vertical split
+    map('n', 'x', function()
+      local line = vim.fn.line('.')
+      local qf = vim.fn.getqflist()[line]
+      vim.cmd('wincmd p | split | buffer ' .. qf.bufnr)
+    end, opts)  -- open in horizontal split from previous window
+    map('n', 'v', function()
+      local line = vim.fn.line('.')
+      local qf = vim.fn.getqflist()[line]
+      vim.cmd('wincmd p | vsplit | buffer ' .. qf.bufnr)
+    end, opts)  -- open in vertical split from previous window
   end,
 })
 

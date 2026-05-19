@@ -1,5 +1,13 @@
 local map = vim.keymap.set
 
+local function cword_with_dash()
+  local isk = vim.bo.iskeyword
+  vim.opt_local.iskeyword:append('-')
+  local word = vim.fn.expand('<cword>')
+  vim.bo.iskeyword = isk
+  return word
+end
+
 local function get_visual_selection()
   local _, ls, cs = unpack(vim.fn.getpos('v'))
   local _, le, ce = unpack(vim.fn.getpos('.'))
@@ -8,10 +16,9 @@ end
 
 -- Search in current file or directory: pattern then optional path with tab completion
 map('n', 's', function()
-  local pattern = vim.fn.input('Search: ', vim.fn.expand('<cword>'))
+  local pattern = vim.fn.input('Search: ', cword_with_dash())
   if pattern == '' then return end
   local dir = vim.fn.input('(Searching "' .. pattern .. '") Enter file or directory (empty = current file): ', '', 'file')
-  vim.fn.setqflist({})
   if dir == '' then
     vim.cmd('vimgrep /' .. pattern .. '/ % | copen')
   else
@@ -22,14 +29,13 @@ end, { desc = 'search-file-or-dir' })
 
 -- Search in all open buffers
 map('n', 'S', function()
-  local pattern = vim.fn.input('Search: ', vim.fn.expand('<cword>'))
+  local pattern = vim.fn.input('Search: ', cword_with_dash())
   if pattern == '' then return end
   local files = table.concat(vim.tbl_map(function(buf)
     return vim.api.nvim_buf_get_name(buf)
   end, vim.tbl_filter(function(buf)
     return vim.api.nvim_buf_is_loaded(buf) and vim.api.nvim_buf_get_name(buf) ~= ''
   end, vim.api.nvim_list_bufs())), ' ')
-  vim.fn.setqflist({})
   vim.cmd('vimgrep /' .. pattern .. '/ ' .. files .. ' | copen')
   vim.cmd('echo \'Searched "' .. pattern .. '" in all open buffers\'')
 end, { desc = 'search-open-buffers' })
@@ -56,12 +62,21 @@ map('v', 'S', function()
   end, vim.tbl_filter(function(buf)
     return vim.api.nvim_buf_is_loaded(buf) and vim.api.nvim_buf_get_name(buf) ~= ''
   end, vim.api.nvim_list_bufs())), ' ')
-  vim.fn.setqflist({})
   vim.cmd('vimgrep /' .. pattern .. '/ ' .. files .. ' | copen')
   vim.cmd('echo \'Searched "' .. pattern .. '" in all open buffers\'')
 end, { desc = 'search-selection-open-buffers' })
 
--- Exit terminal mode
+-- Jump to quickfix window
+map('n', '<leader>q', function()
+  for _, win in ipairs(vim.fn.getwininfo()) do
+    if win.quickfix == 1 and win.loclist == 0 then
+      vim.api.nvim_set_current_win(win.winid)
+      return
+    end
+  end
+end, { desc = 'focus-quickfix' })
+
+
 map('t', '<Esc>', '<C-\\><C-n>', { desc = 'exit-terminal-mode' })
 
 -- Reload config
