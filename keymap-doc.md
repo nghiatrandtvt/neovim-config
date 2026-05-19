@@ -184,6 +184,11 @@ _ "zoom in specific panel"
 s (lower s) "Search in current file or directory (use . for current directory)"
 S (capital s) "Search in all opening buffers (no need to enter location)"
 
+Enter "override the buffer with same file name or previous focused buffer"
+v "Open search file in vertical"
+h "Open search file in horizontal"
+t "Open search file in new tab"
+
 :vimgrep /string_to_search/gj **/*.<file_type> "search string with <file_type> only from current directory"
 :copen "open quickfix list after vimgrep"
 :noh "to clear search highlight"
