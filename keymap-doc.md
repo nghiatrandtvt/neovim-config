@@ -181,23 +181,8 @@ _ "zoom in specific panel"
 ----------------- END LAZYGIT ------------------------
 
 ------------------ SEARCH -------------------
-SPC-sf "search file in current directory" (Use FZF)
-
-SPC-ss "search string in current file" (Use FZF)
-SPC-sS "search string in all buffers" (Use FZF)
-SPC-sa "search string in current directory" (Use Telescope)
-
-SPC-scs "search string under cursor in current file" (Use FZF)
-SPC-scS "search string under cursor in all buffers" (Use FZF)
-SPC-sca "search string under cursor in current directory" (Use Telescope)
-SPC-scf "search file under cursor in current directory" (Use FZF)
-SPC-scF "search file under cursor with path" (Use FZF)
-
-SPC-ss "search selected string in current file. VISUALIZE mode" (Use FZF)
-SPC-sS "search selected string in all buffers. VISUALIZE mode" (Use FZF)
-SPC-sa "search selected string in current directory VISUALIZE mode" (Use Telescope)
-SPC-sf "search selected file in current directory" (Use FZF)
-SPC-sF "search selected file with path" (Use FZF)
+s (lower s) "Search in current file or directory (use . for current directory)"
+S (capital s) "Search in all opening buffers (no need to enter location)"
 
 :vimgrep /string_to_search/gj **/*.<file_type> "search string with <file_type> only from current directory"
 :copen "open quickfix list after vimgrep"
