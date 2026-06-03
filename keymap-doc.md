@@ -189,10 +189,15 @@ v "Open search file in vertical"
 h "Open search file in horizontal"
 t "Open search file in new tab"
 
-:vimgrep /string_to_search/gj **/*.<file_type> "search string with <file_type> only from current directory"
-:copen "open quickfix list after vimgrep"
-:noh "to clear search highlight"
+SPC-q "to quick jump to quickfix list"
+
+:colder "go to previsous quickfix lists"
+:cnewer "go to next quickfix lists"
 :cexpr [] "clear search quickfix list"
+:copen "open quickfix list after vimgrep"
+
+:vimgrep /string_to_search/gj **/*.<file_type> "search string with <file_type> only from current directory"
+:noh "to clear search highlight"
 
 C-V "paste to search box"
 ---------------- END SEARCH -----------------
