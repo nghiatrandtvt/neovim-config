@@ -1,5 +1,4 @@
 -- Highlights
-vim.api.nvim_set_hl(0, 'TermNormal', { bg = '#000000' })
 vim.api.nvim_set_hl(0, 'NvimTreeNormal', { bg = '#3f3f4e' })
 vim.api.nvim_set_hl(0, 'WinSeparator', { fg = '#06c197' })
 vim.api.nvim_set_hl(0, 'Cursor', { bg = '#888888' })
