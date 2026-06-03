@@ -17,7 +17,7 @@ require('lualine').setup({
     lualine_b = {
       { 'branch', icon = { '', align = 'left', color = { fg = 'yellow', gui = 'bold' } } },
     },
-    lualine_c = { 'filename', { function() return vim.lsp.status() ~= '' and vim.lsp.status() or vim.g.jdtls_status or '' end } },
+    lualine_c = { { 'filename', path = 3 }, { function() return vim.lsp.status() ~= '' and vim.lsp.status() or vim.g.jdtls_status or '' end } },
     lualine_x = {
       function() return vim.fn.getcwd() end,
       function() return 'wnu-' .. vim.api.nvim_win_get_number(0) end,

@@ -33,3 +33,13 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'TermOpen', 'BufRead' }, {
 vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter' }, {
   command = 'checktime',
 })
+
+-- Highlight active window (inactive gets dimmed, active keeps original)
+vim.api.nvim_set_hl(0, 'InactiveWindow', { bg = '#3c3836' })
+
+vim.api.nvim_create_autocmd('WinEnter', {
+  callback = function() vim.wo.winhighlight = '' end,
+})
+vim.api.nvim_create_autocmd('WinLeave', {
+  callback = function() vim.wo.winhighlight = 'Normal:InactiveWindow' end,
+})
