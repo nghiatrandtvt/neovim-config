@@ -178,6 +178,9 @@ r "rebase"
 0 "focus on preview panel. Then C-x to back to side panels"
 + "zoom out specific panel"
 _ "zoom in specific panel"
+
+/ "Search commit from panel commit"
+Ctrl + s "filter commit by author"
 ----------------- END LAZYGIT ------------------------
 
 ------------------ SEARCH -------------------
