@@ -1,8 +1,14 @@
 vim.g.mapleader = ' '
 
 -- Theme
-vim.cmd('colorscheme dracula')
+vim.cmd('colorscheme gruvbox')
 vim.opt.termguicolors = true
+
+-- Terminal
+vim.opt.shell = 'C:/PROGRA~1/Git/bin/bash.exe'
+vim.opt.shellcmdflag = '-c'
+vim.opt.shellquote = ''
+vim.opt.shellxquote = ''
 
 -- General
 vim.opt.number = true

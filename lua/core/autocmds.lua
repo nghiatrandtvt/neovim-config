@@ -35,7 +35,7 @@ vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter' }, {
 })
 
 -- Highlight active window (inactive gets dimmed, active keeps original)
-vim.api.nvim_set_hl(0, 'InactiveWindow', { bg = '#3c3836' })
+vim.api.nvim_set_hl(0, 'InactiveWindow', { bg = '#504945' })
 
 vim.api.nvim_create_autocmd('WinEnter', {
   callback = function() vim.wo.winhighlight = '' end,
