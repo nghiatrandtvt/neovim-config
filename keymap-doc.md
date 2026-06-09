@@ -136,6 +136,13 @@ SPC-gc "copy full gerrit url. Need to copy them to clipboard first such as using
 C-g "open a commit directly from editor"
 A-g "copy a commit directly from editor"
 
+C-g "open a commit directly from Telescope git log for file (spc-gf)"
+A-g "copy a commit directly from Telescope git log for file (spc-gf)"
+
+C-g "open a commit directly from Telescope git log for current repo (spc-gl)"
+A-g "copy a commit directly from Telescope git log for current repo (spc-gl)"
+
+
 :CopyToClipboard <string_to_copy> "copy string to clipboard. It mostly use to open gerrit when we must type commit hash by hand"
 C-y to copy hash commit to clipboard when only using Telescope git_commits or git_bcommits
 ----------- END GIT ------------------

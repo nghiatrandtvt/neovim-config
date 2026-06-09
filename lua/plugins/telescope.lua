@@ -2,6 +2,11 @@ local action_state = require('telescope.actions.state')
 local actions = require('telescope.actions')
 local builtin = require('telescope.builtin')
 
+local scripts_dir = vim.fn.stdpath('config') .. '/scripts'
+local function run_script(script, hash)
+  return vim.fn.system(scripts_dir .. '/' .. script .. ' ' .. hash)
+end
+
 local function get_commit_hash()
   local entry = action_state.get_selected_entry()
   return entry and entry.value:match('^%S+')
@@ -30,6 +35,21 @@ end
 
 local commit_mappings = { ['<CR>'] = checkout_commit, ['<C-y>'] = copy_hash_commit }
 
+local git_mappings = {
+  ['<C-g>'] = function(prompt_bufnr)
+    local hash = get_commit_hash()
+    if not hash then return end
+    actions.close(prompt_bufnr)
+    vim.notify(run_script('open-commit-lazygit.sh', hash))
+  end,
+  ['<A-g>'] = function(prompt_bufnr)
+    local hash = get_commit_hash()
+    if not hash then return end
+    actions.close(prompt_bufnr)
+    vim.notify(run_script('copy-commit-lazygit.sh', hash))
+  end,
+}
+
 require('telescope').setup({
   defaults = {
     prompt_prefix = '>>> ',
@@ -38,14 +58,14 @@ require('telescope').setup({
   },
   pickers = {
     git_commits = {
-      mappings = { i = commit_mappings, n = commit_mappings },
+      mappings = {
+        i = vim.tbl_extend('force', commit_mappings, git_mappings),
+        n = vim.tbl_extend('force', commit_mappings, git_mappings),
+      },
       git_command = { 'git', 'log', '--pretty=%h %ci %s', '--' },
     },
     git_bcommits = {
-      mappings = {
-        i = { ['<C-y>'] = copy_hash_commit },
-        n = { ['<C-y>'] = copy_hash_commit },
-      },
+      mappings = { i = git_mappings, n = git_mappings },
     },
   },
 })
@@ -66,6 +86,12 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 -- Keymaps
+vim.keymap.set('n', '<leader>sF', function()
+    local dir = vim.fn.input('Search in: ', vim.fn.getcwd(), 'dir')
+    if dir == '' then return end
+    builtin.find_files({ cwd = dir })
+  end, { desc = 'telescope-find-file-custom-dir' })
+
 vim.keymap.set('n', '<leader>sca', function()
   local word = vim.fn.expand('<cword>'):match('^[^/]+') or vim.fn.expand('<cword>')
   builtin.live_grep({ default_text = word })
