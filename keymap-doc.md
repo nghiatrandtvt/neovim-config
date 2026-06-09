@@ -132,6 +132,7 @@ SPC-gd "git diff" (Using git signs)
 SPC-gO "open gerrit home page"
 SPC-go "open gerrit with changeId or commit hash. Need to copy them to clipboard first"
 SPC-gc "copy full gerrit url. Need to copy them to clipboard first such as using inw key when do SPC-gB"
+
 C-g "open a commit directly from editor"
 A-g "copy a commit directly from editor"
 
@@ -172,6 +173,7 @@ q "Exit lazygit"
 
 o "open commit on browser"
 C-o "copy commit url to clipboard"
+
 y "copy commit attributes such as commit hash, author ..."
 p "pull"
 r "rebase"

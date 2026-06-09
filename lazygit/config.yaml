@@ -1,0 +1,49 @@
+keybinding:
+  universal:
+    return: '<c-x>'
+
+gui:
+  theme:
+    inactiveBorderColor:
+    - cyan 
+    activeBorderColor:
+    - yellow 
+    - bold
+
+customCommands:
+  - key: '<c-p>'
+    command: 'git push origin HEAD:refs/for/master'
+    context: 'commits'
+    stream: true
+    loadingText: 'Pushing to remote master branch...'
+    description: 'Custom: Do - git push --signed origin HEAD:refs/for/master'
+  - key: '<c-p>'
+    command: 'git pull --rebase'
+    context: 'localBranches'
+    stream: true
+    loadingText: 'Pulling then rebase...'
+    description: 'Custom: Do - git pull --rebase'
+  - key: '<c-f>'
+    command: 'git fetch'
+    context: 'localBranches'
+    stream: true
+    loadingText: 'Fetching...'
+    description: 'Custom: Do - git fetch'
+  - key: 'o'
+    context:  'commits'
+    command: "<parent_path>/scripts/open-commit-lazygit.sh {{.SelectedLocalCommit.Hash}}"
+    stream: true
+    loadingText: 'Openning {{.SelectedLocalCommit.Hash}}'
+    description: 'Custom: Do - open commit from browser'
+    subprocess: true
+  - key: '<c-o>'
+    context:  'commits'
+    command: "<parent_path>/scripts/copy-commit-lazygit.sh {{.SelectedLocalCommit.Hash}}"
+    stream: true
+    loadingText: 'Openning {{.SelectedLocalCommit.Hash}}'
+    description: 'Custom: Do - copy commit from browser'
+    subprocess: true
+
+
+git:
+  autoFetch: false
