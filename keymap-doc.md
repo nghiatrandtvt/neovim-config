@@ -195,6 +195,7 @@ Ctrl + s "filter commit by author"
 ------------------ SEARCH -------------------
 s (lower s) "Search in current file or directory (use . for current directory)"
 S (capital s) "Search in all opening buffers (no need to enter location)"
+Note: use \| to search multiple strings. For example name\|age to search string name and string age
 
 Enter "override the buffer with same file name or previous focused buffer"
 v "Open search file in vertical"
