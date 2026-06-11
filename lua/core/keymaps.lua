@@ -15,15 +15,25 @@ local function get_visual_selection()
 end
 
 -- Search in current file or directory: pattern then optional path with tab completion
+local function grep_to_qf(pattern, dir)
+  local output = vim.fn.systemlist('grep -rEn ' .. vim.fn.shellescape(pattern) .. ' ' .. vim.fn.shellescape(dir))
+  local qflist = {}
+  for _, line in ipairs(output) do
+    local file, lnum, text = line:match('^(.+):(%d+):(.*)$')
+    if file then table.insert(qflist, { filename = file, lnum = tonumber(lnum), text = text }) end
+  end
+  vim.fn.setqflist(qflist)
+  vim.cmd('copen')
+end
+
 map('n', 's', function()
   local pattern = vim.fn.input('Search: ', cword_with_dash())
   if pattern == '' then return end
   local dir = vim.fn.input('(Searching "' .. pattern .. '") Enter file or directory (empty = current file): ', '', 'file')
   if dir == '' then
-    vim.cmd('vimgrep /' .. pattern .. '/ % | copen')
+    vim.cmd('vimgrep /' .. pattern:gsub('|', '\\|') .. '/ % | copen')
   else
-    vim.cmd('grep! -rE ' .. vim.fn.shellescape(pattern) .. ' ' .. dir)
-    vim.cmd('copen')
+    grep_to_qf(pattern, dir)
   end
 end, { desc = 'search-file-or-dir' })
 
@@ -45,12 +55,10 @@ map('v', 's', function()
   local pattern = vim.fn.input('Search: ', get_visual_selection())
   if pattern == '' then return end
   local dir = vim.fn.input('(Searching "' .. pattern .. '") Enter file or directory (empty = current file): ', '', 'file')
-  vim.fn.setqflist({})
   if dir == '' then
-    vim.cmd('vimgrep /' .. pattern .. '/ % | copen')
+    vim.cmd('vimgrep /' .. pattern:gsub('|', '\\|') .. '/ % | copen')
   else
-    vim.cmd('grep! -rE ' .. vim.fn.shellescape(pattern) .. ' ' .. dir)
-    vim.cmd('copen')
+    grep_to_qf(pattern, dir)
   end
 end, { desc = 'search-selection-file-or-dir' })
 
